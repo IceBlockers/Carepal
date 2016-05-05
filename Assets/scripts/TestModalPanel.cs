@@ -20,7 +20,7 @@ public class TestModalPanel : MonoBehaviour {
 	}
 
 	public void testPanel() {
-		modalPanel.Choice("Hi Grayden!", yes, noe, cancele);
+		modalPanel.Choice("What food should pal eat?", yes, noe, cancele);
 	}
 	
 	void yes() {
