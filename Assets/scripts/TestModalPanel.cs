@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Events;
-using UnityEngine.EventSystems;
 using System.Collections;
 
 public class TestModalPanel : MonoBehaviour {
@@ -26,6 +25,7 @@ public class TestModalPanel : MonoBehaviour {
 	
 	void yes() {
 		Debug.Log("Yes");
+		RewardManager.Instance().AddReward("yreward");
 	}
 	
 	void no() {
