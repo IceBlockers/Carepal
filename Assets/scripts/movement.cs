@@ -30,6 +30,7 @@ public class movement : MonoBehaviour {
     public Vector3 clickPos;
     public Vector2 clickVec;
     public const double delta = 0.1;
+    private Animator m_Anim;
     public const double clickThreshold = 3;
     Stack<Node> moveStack = new Stack<Node>();
     public List<Node> movementNodes = new List<Node> {
@@ -43,10 +44,28 @@ public class movement : MonoBehaviour {
     };
     public Node palNode;
 
+    private void Awake() {
+        m_Anim = pal.GetComponent<Animator>();
+    }
+
 	// Use this for initialization
 	void Start () {
         clickPos = new Vector3(0, 0, 0);
         createNodeMap();
+    }
+
+    void facingLeft(bool left) {
+        if (left) {
+            pal.transform.localScale = new Vector3(
+                -System.Math.Abs(pal.transform.localScale.x),
+                pal.transform.localScale.y,
+                pal.transform.localScale.z);
+        } else {
+            pal.transform.localScale = new Vector3(
+                System.Math.Abs(pal.transform.localScale.x),
+                pal.transform.localScale.y,
+                pal.transform.localScale.z);
+        }
     }
 
     void createNodeMap() {
@@ -130,8 +149,17 @@ public class movement : MonoBehaviour {
                 }
             }
             
+            if(clickVec.x < 0) {
+                facingLeft(true);
+            } else {
+                facingLeft(false);
+            }
+
             // move the pal
             pal.transform.Translate(Time.deltaTime * clickVec.x * 10, Time.deltaTime * clickVec.y * 10, 0);
+            m_Anim.SetFloat("vSpeed", clickVec.magnitude);
+        } else {
+            m_Anim.SetFloat("vSpeed", 0);
         }
            
         // display the pal's position vector
