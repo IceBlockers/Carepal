@@ -29,6 +29,7 @@ public class movement : MonoBehaviour {
     public GameObject pal;
     public Vector3 clickPos;
     public Vector2 clickVec;
+
     public const double delta = 0.1;
     private Animator m_Anim;
     public const double clickThreshold = 3;
@@ -48,8 +49,8 @@ public class movement : MonoBehaviour {
         m_Anim = pal.GetComponent<Animator>();
     }
 
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start () {
         clickPos = new Vector3(0, 0, 0);
         createNodeMap();
     }
@@ -98,6 +99,7 @@ public class movement : MonoBehaviour {
         // n7
         movementNodes[6].addAdjNode(movementNodes[5]);
     }
+
 
     // Update is called once per frame
     void Update() {
@@ -150,6 +152,7 @@ public class movement : MonoBehaviour {
             }
             
             if(clickVec.x < 0) {
+
                 facingLeft(true);
             } else {
                 facingLeft(false);
@@ -157,6 +160,7 @@ public class movement : MonoBehaviour {
 
             // move the pal
             pal.transform.Translate(Time.deltaTime * clickVec.x * 10, Time.deltaTime * clickVec.y * 10, 0);
+
             m_Anim.SetFloat("vSpeed", clickVec.magnitude);
         } else {
             m_Anim.SetFloat("vSpeed", 0);
