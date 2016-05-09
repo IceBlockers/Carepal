@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class room_controller : MonoBehaviour {
+public class bedroom_controller : MonoBehaviour {
     public GameObject wardrobeOpen;
     public GameObject door;
     public GameObject bed;
