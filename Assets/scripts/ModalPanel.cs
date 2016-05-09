@@ -4,15 +4,10 @@ using UnityEngine.Events;
 using System.Collections;
 
 //  This script will be updated in Part 2 of this 2 part series.
-public class ModalPanel : MonoBehaviour {
-
-    public Text question;
-    public Button yesButton;
-    public Button noButton;
-    public Button cancelButton;
-    public GameObject modalPanelObject;
+public class ModalPanel : PanelInterface {
     
     private static ModalPanel modalPanel;
+	
     
     public static ModalPanel Instance () {
         if (!modalPanel) {
@@ -25,29 +20,29 @@ public class ModalPanel : MonoBehaviour {
     }
 
     // Yes/No/Cancel: A string, a Yes event, a No event and Cancel event
-    public void Choice (string question, UnityAction yesEvent, UnityAction noEvent, UnityAction cancelEvent) {
-        modalPanelObject.SetActive (true);
+    override public void Choice (string question, UnityAction[] events) {
+        ModalObject.SetActive (true);
         
-        yesButton.onClick.RemoveAllListeners();
-        yesButton.onClick.AddListener (yesEvent);
-        yesButton.onClick.AddListener (ClosePanel);
+        Buttons[0].onClick.RemoveAllListeners();
+        Buttons[0].onClick.AddListener (events[0]);
+        Buttons[0].onClick.AddListener (ClosePanel);
         
-        noButton.onClick.RemoveAllListeners();
-        noButton.onClick.AddListener (noEvent);
-        noButton.onClick.AddListener (ClosePanel);
+        Buttons[1].onClick.RemoveAllListeners();
+        Buttons[1].onClick.AddListener (events[1]);
+        Buttons[1].onClick.AddListener (ClosePanel);
         
-        cancelButton.onClick.RemoveAllListeners();
-        cancelButton.onClick.AddListener (cancelEvent);
-        cancelButton.onClick.AddListener (ClosePanel);
+        Buttons[2].onClick.RemoveAllListeners();
+        Buttons[2].onClick.AddListener (events[2]);
+        Buttons[2].onClick.AddListener (ClosePanel);
 
-        this.question.text = question;
+        this.QuestionText.text = question;
 
-        yesButton.gameObject.SetActive (true);
-        noButton.gameObject.SetActive (true);
-        cancelButton.gameObject.SetActive (true);
+        Buttons[0].gameObject.SetActive (true);
+        Buttons[1].gameObject.SetActive (true);
+        Buttons[2].gameObject.SetActive (true);
     }
 
-    void ClosePanel () {
-        modalPanelObject.SetActive (false);
+    override public void ClosePanel () {
+        ModalObject.SetActive (false);
     }
 }
