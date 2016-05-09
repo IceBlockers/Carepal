@@ -2,9 +2,11 @@
 using System.Collections;
 
 public class bedroom_controller : MonoBehaviour {
+    public GameObject room;
     public GameObject wardrobeOpen;
     public GameObject door;
     public GameObject bed;
+    public GameObject bedSleeping;
 
     public void OpenDoor() {
         Renderer r = door.GetComponent<Renderer>();
@@ -33,6 +35,16 @@ public class bedroom_controller : MonoBehaviour {
 
     public void BedBehind() {
         Renderer r = bed.GetComponent<Renderer>();
+        r.sortingOrder = -101;
+    }
+
+    public void StartSleeping() {
+        Renderer r = bedSleeping.GetComponent<Renderer>();
+        r.sortingOrder = 101;
+    }
+
+    public void StopSleeping() {
+        Renderer r = bedSleeping.GetComponent<Renderer>();
         r.sortingOrder = -101;
     }
 }
