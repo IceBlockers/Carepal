@@ -3,15 +3,16 @@ using UnityEngine.UI;
 using UnityEngine.Events;
 using System.Collections;
 
-//  This script will be updated in Part 2 of this 2 part series.
+/*
+Example ModalPanel.
+*/
 public class ModalPanel : BaseModalPanel {
     
+	public Button[] Buttons;	
+	
+	// implement the singleton pattern
     private static ModalPanel modalPanel;
-	public Button[] Buttons;
-	
 
-	
-    
     public static ModalPanel Instance () {
         if (!modalPanel) {
             modalPanel = FindObjectOfType(typeof (ModalPanel)) as ModalPanel;
@@ -22,7 +23,7 @@ public class ModalPanel : BaseModalPanel {
         return modalPanel;
     }
 
-    // Yes/No/Cancel: A string, a Yes event, a No event and Cancel event
+    // call a prompt with the given question
     override public void Choice (string question, UnityAction[] events) {
         ModalObject.SetActive (true);
         
