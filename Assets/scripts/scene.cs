@@ -13,9 +13,11 @@ namespace Assets.scripts {
 
         public Node palNode;
         public List<Node> movementNodes;
+        public List<Clickable> clickBoxList;
         public Stack<Node> moveStack = new Stack<Node>();
         public Vector3 clickPos;
         public Vector2 clickVec;
+        public Clickable clickedBox;
         
         public const double delta = 0.1;
         
@@ -40,20 +42,35 @@ namespace Assets.scripts {
 
         // function to handle mousedown events
         public void handleMouseDown(Vector3 mousePos) {
+
             // transform screen coords to world coords
             clickPos = camera.ScreenToWorldPoint(mousePos);
 
             // find node closest to click
             var nodeClosest = findClosestNodeToClick(clickPos);
-            Debug.Log(nodeClosest.name + " was closest node");
 
+            // check list of clickable boxes
+            foreach (Clickable clickBox in clickBoxList) {
+                if(clickBox.wasClicked(clickPos)) {
+                    // set path to that node
+                    nodeClosest = clickBox.nodeNearRect;
+
+                    // set click pos to be that node
+                    clickPos = clickBox.nodeNearRect.position;
+
+                    // set the clicked box variable
+                    clickedBox = clickBox;
+                }
+            }
 
             if (findClosestNodeToClick(clickPos) != findClosestNodeToPal(pal.transform.position)) {
+
                 // check if click is close enough to node to warrant movement
                 if (!isClickThreshold(nodeClosest, clickPos, clickThreshold)) {
                     // traverse node adjacency to find pal position
 
                     resetNodes();
+
                     // do a breadth first search from the node closest to pal to node closest to click
                     bfs(palNode, nodeClosest);
 
@@ -256,7 +273,6 @@ namespace Assets.scripts {
                     return true;
                 }
             }
-
             return false;
         }
     }
