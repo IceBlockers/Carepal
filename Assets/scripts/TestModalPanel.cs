@@ -20,7 +20,8 @@ public class TestModalPanel : MonoBehaviour {
 	}
 
 	public void testPanel() {
-		modalPanel.Choice("What food should pal eat?", yes, noe, cancele);
+		UnityAction[] arr = {yese, noe, cancele};
+		modalPanel.Choice("What food should pal eat?", arr);
 	}
 	
 	void yes() {
