@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 
 namespace Assets.scripts {
-    class Scene {
+    class LevelScene {
         public Camera camera;
         public GameObject pal;
         private Animator m_Anim;
@@ -18,12 +18,14 @@ namespace Assets.scripts {
         public Vector3 clickPos;
         public Vector2 clickVec;
         public Clickable clickedBox;
+
+        bool palStillMoving = false;
         
         public const double delta = 0.1;
         
         public const double clickThreshold = 3;
 
-        public Scene(Camera camera, GameObject pal, Animator m_Anim) {
+        public LevelScene(Camera camera, GameObject pal, Animator m_Anim) {
             this.camera = camera;
             this.pal = pal;
             this.m_Anim = m_Anim;
@@ -49,18 +51,22 @@ namespace Assets.scripts {
             // find node closest to click
             var nodeClosest = findClosestNodeToClick(clickPos);
 
-            // check list of clickable boxes
-            foreach (Clickable clickBox in clickBoxList) {
-                if(clickBox.wasClicked(clickPos)) {
-                    // set path to that node
-                    nodeClosest = clickBox.nodeNearRect;
+            if(clickBoxList != null) {
+                // check list of clickable boxes
+                foreach (Clickable clickBox in clickBoxList) {
+                    if (clickBox.clickRect.Contains(clickPos)) {
+                        // set path to that node
+                        nodeClosest = clickBox.nodeNearRect;
 
-                    // set click pos to be that node
-                    clickPos = clickBox.nodeNearRect.position;
+                        // set click pos to be that node
+                        clickPos = clickBox.nodeNearRect.position;
 
-                    // set the clicked box variable
-                    clickedBox = clickBox;
+                        // set the clicked box variable
+                        clickedBox = clickBox;
+                    }
                 }
+            } else {
+                Debug.Log("clickboxlist is null");
             }
 
             if (findClosestNodeToClick(clickPos) != findClosestNodeToPal(pal.transform.position)) {
@@ -116,8 +122,11 @@ namespace Assets.scripts {
                 pal.transform.Translate(Time.deltaTime * clickVec.x * 10, Time.deltaTime * clickVec.y * 10, 0);
 
                 m_Anim.SetFloat("vSpeed", clickVec.magnitude);
+                palStillMoving = true;
             } else {
                 m_Anim.SetFloat("vSpeed", 0);
+                palStillMoving = false;
+
             }
         }
 
@@ -231,6 +240,10 @@ namespace Assets.scripts {
                 }
             }
         }
+
+        public bool isPalMoving() {
+            return palStillMoving;
+        }
     }
 
     // node class
@@ -251,11 +264,18 @@ namespace Assets.scripts {
         public void addAdjNode(Node node) {
             adjNodes.Add(node);
         }
+
+        public static void addAdj(Node node1, Node node2) {
+            node1.adjNodes.Add(node2);
+            node2.adjNodes.Add(node1);
+        }
     }
 
     public class Clickable {
         public Rect clickRect { private set; get; }
         public Node nodeNearRect;
+        public delegate void Activity();
+        public Activity StartActivity;
 
         public Clickable(Vector2 topLeftPos, int width, int height) {
             clickRect = new Rect(topLeftPos.x, topLeftPos.y, width, height);
@@ -267,13 +287,5 @@ namespace Assets.scripts {
             nodeNearRect = nearestNode;
         }
 
-        public bool wasClicked(Vector3 clickPos) {
-            if(clickPos.x >= clickRect.x & clickPos.x <= (clickRect.x + clickRect.width)) {
-                if (clickPos.y <= clickRect.y & clickPos.y >= (clickRect.y - clickRect.height)) {
-                    return true;
-                }
-            }
-            return false;
-        }
     }
 }
