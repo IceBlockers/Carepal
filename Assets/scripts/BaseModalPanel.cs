@@ -3,10 +3,25 @@ using UnityEngine.UI;
 using UnityEngine.Events;
 using System.Collections;
 
-public abstract class PanelInterface : MonoBehaviour {
+/*
+Creating and using panels.
+
+1) Create a Manager object. This will hold our references later.
+2) Create an object that will invoke the panel. For example, a button.
+3) Create your panel using the ModalPrefab object.
+3.1) Add buttons using the ButtonPrefab to the following object: ModalPrefab->ChoicePanel->ResponsePanel. Set text appropriately.
+4) Create a script for your panel. It should extend BaseModalPanel.
+5) Add the necessary methods; include a way to get a reference for the object (using the singleton pattern).
+6) Create a script that will invoke the panel. It should contain the callback methods that will be tied to the buttons.
+7) Add the panel script from step 4 to the manager and fill in the references in the inspector.
+8) Add the callback script from step 6 to the object from step 2.
+9) Ensure that the panel is set to not enabled.
+*/
+
+public abstract class BaseModalPanel : MonoBehaviour {
 	
 	public Text QuestionText;
-	public Button[] Buttons; // callback functions defined in Choice
+	//public Button[] Buttons; // callback functions defined in Choice
 	public GameObject ModalObject; // represents the panel; enables showing/hiding
 	
 	

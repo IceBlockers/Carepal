@@ -26,7 +26,6 @@ public class TestModalPanel : MonoBehaviour {
 	
 	void yes() {
 		Debug.Log("Yes");
-		RewardManager.Instance().AddReward("yreward");
 	}
 	
 	void no() {

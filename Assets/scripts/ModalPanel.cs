@@ -4,9 +4,12 @@ using UnityEngine.Events;
 using System.Collections;
 
 //  This script will be updated in Part 2 of this 2 part series.
-public class ModalPanel : PanelInterface {
+public class ModalPanel : BaseModalPanel {
     
     private static ModalPanel modalPanel;
+	public Button[] Buttons;
+	
+
 	
     
     public static ModalPanel Instance () {
