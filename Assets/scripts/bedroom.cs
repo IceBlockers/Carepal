@@ -52,7 +52,7 @@ public class bedroom : MonoBehaviour {
         Clickable wardrobeBox = new Clickable(new Vector2((-7.7f), (-2.31f)), 3.73f, 5.6f, bedroomScene.movementNodes[0]);
         wardrobeBox.StartActivity = bedroomScript.ToggleWardrobe;
 
-        Clickable bedBox = new Clickable(new Vector2((3.1f), (-4.0f)), 8.0f, 3.0f, bedroomScene.movementNodes[6]);
+        Clickable bedBox = new Clickable(new Vector2((3.1f), (-2.0f)), 8.0f, 1.0f, bedroomScene.movementNodes[6]);
         bedBox.StartActivity = bedroomScript.ToggleSleeping;
 
         // populate the clickboxlist
