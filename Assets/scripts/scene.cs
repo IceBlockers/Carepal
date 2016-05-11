@@ -63,6 +63,7 @@ namespace Assets.scripts {
 
                         // set the clicked box variable
                         clickedBox = clickBox;
+                        Debug.Log("clicked on Thing " + clickedBox.ToString());
                     }
                 }
             } else {
@@ -282,7 +283,7 @@ namespace Assets.scripts {
             nodeNearRect = null;
         }
 
-        public Clickable(Vector2 topLeftPos, int width, int height, Node nearestNode) {
+        public Clickable(Vector2 topLeftPos, float width, float height, Node nearestNode) {
             clickRect = new Rect(topLeftPos.x, topLeftPos.y, width, height);
             nodeNearRect = nearestNode;
         }
