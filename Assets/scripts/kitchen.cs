@@ -9,24 +9,28 @@ public class kitchen : MonoBehaviour {
 
     new public Camera camera;
     public GameObject pal;
+    public GameObject kitchenSet;
+    private kitchen_controller kitchenScript;
     private Animator m_Anim;
 
     LevelScene kitchenScene;
 
     private void Awake() {
         m_Anim = pal.GetComponent<Animator>();
+        kitchenScript = kitchenSet.GetComponent<kitchen_controller>();
     }
 
     // Use this for initialization
     void Start () {
         kitchenScene = new LevelScene(camera, pal, m_Anim);
         kitchenScene.movementNodes = new List<Node> {
-            new Node("n1", new Vector2(3.59f, -1.78f)), // dresser
-            new Node("n2", new Vector2(1.87f, -3.6f)), // door 
-            new Node("n3", new Vector2(6.548397f, -3.559552f)), // left-floor 
-            new Node("n4", new Vector2(-0.9f, -2.68f)), // mid-floor
-            new Node("n5", new Vector2(-4.34f, -2.62f)), // desk 
-            new Node("n6", new Vector2(-8.67f, -2.72f)), // footbed 
+            new Node("n1", new Vector2(3.59f, -1.78f)), // doorway
+            new Node("n2", new Vector2(1.87f, -3.6f)), //  
+            new Node("n3", new Vector2(6.548397f, -3.559552f)), //  
+            new Node("n4", new Vector2(-0.9f, -2.68f)), // 
+            new Node("n5", new Vector2(-4.34f, -2.62f)), //  
+            new Node("n6", new Vector2(-8.67f, -2.72f)), // 
+            new Node("n7", new Vector2(6.0f,  -0.5f)), // hallway
         };
 
         kitchenScene.clickPos = new Vector3(0, 0, 0);
@@ -34,8 +38,8 @@ public class kitchen : MonoBehaviour {
 
         // define clockBox clickBox and it's animation function delegate
             // position is center of object - half of width/height
-        Clickable stairsBox = new Clickable(new Vector2((3.644229f - 2), (1.755371f - 2)), 4, 4, kitchenScene.movementNodes[0]);
-        stairsBox.StartActivity = () => SceneManager.LoadScene("level 1");
+        Clickable stairsBox = new Clickable(new Vector2((3.644229f - 2), (1.755371f - 2)), 4, 4, kitchenScene.movementNodes[6]);
+        stairsBox.StartActivity = () => SceneManager.LoadScene("LevelBedroom");
 
         // populate the clickboxlist
         kitchenScene.clickBoxList = new List<Clickable> {
@@ -63,10 +67,21 @@ public class kitchen : MonoBehaviour {
 
         // n5 adj to n6
         Node.addAdj(kitchenScene.movementNodes[4], kitchenScene.movementNodes[5]);
+
+        // n7 
+        //Node.addAdj(kitchenScene.movementNodes[6], kitchenScene.movementNodes[1]);
+        //Node.addAdj(kitchenScene.movementNodes[1], kitchenScene.movementNodes[6]);
     }
 
     // Update is called once per frame
     void Update () {
+
+        // update object layering for scene
+        if (pal.transform.position.y > -1.8) {
+            kitchenScript.InHallway();
+        } else {
+            kitchenScript.InKitchen();
+        }
 
         // pal has stopped moving: checking for activities to run
         if (!kitchenScene.isPalMoving()) {

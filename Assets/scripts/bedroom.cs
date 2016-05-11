@@ -12,11 +12,13 @@ public class bedroom : MonoBehaviour {
     private Animator m_Anim;
 
     LevelScene bedroomScene;
-    public GameObject bedObject;
+    public GameObject bedroomSet;
+    private bedroom_controller bedroomScript;
     public GameObject clockObject;
 
     private void Awake() {
         m_Anim = pal.GetComponent<Animator>();
+        bedroomScript = bedroomSet.GetComponent<bedroom_controller>();
     }
 
     // Use this for initialization
@@ -47,10 +49,18 @@ public class bedroom : MonoBehaviour {
         Clickable doorBox = new Clickable(new Vector2((-10.14934f - 2), (-0.310485f - 2)), 4, 6, bedroomScene.movementNodes[1]);
         doorBox.StartActivity = () => SceneManager.LoadScene("LevelKitchen");
 
+        Clickable wardrobeBox = new Clickable(new Vector2((-7.7f), (-2.31f)), 3.73f, 5.6f, bedroomScene.movementNodes[0]);
+        wardrobeBox.StartActivity = bedroomScript.ToggleWardrobe;
+
+        Clickable bedBox = new Clickable(new Vector2((3.1f), (-4.0f)), 8.0f, 3.0f, bedroomScene.movementNodes[6]);
+        bedBox.StartActivity = bedroomScript.ToggleSleeping;
+
         // populate the clickboxlist
         bedroomScene.clickBoxList = new List<Clickable> {
             clockBox,
-            doorBox
+            doorBox,
+            wardrobeBox,
+            bedBox
         };
     }
 
@@ -86,11 +96,9 @@ public class bedroom : MonoBehaviour {
 
         // update object layering for scene
         if(pal.transform.position.y > -3) {
-            var bed = bedObject.GetComponent<Renderer>();
-            bed.sortingOrder = 50;
+            bedroomScript.BedInFront();
         } else {
-            var bed = bedObject.GetComponent<Renderer>();
-            bed.sortingOrder = -50;
+            bedroomScript.BedBehind();
         }
 
         // pal has stopped moving: checking for activities to run

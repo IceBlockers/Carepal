@@ -6,6 +6,7 @@ public class bedroom_controller : MonoBehaviour {
     public GameObject wardrobeOpen;
     public GameObject door;
     public GameObject bed;
+    public GameObject pal;
     public GameObject bedSleeping;
 
     public void OpenDoor() {
@@ -28,6 +29,15 @@ public class bedroom_controller : MonoBehaviour {
         r.sortingOrder = -101;
     }
 
+    public void ToggleWardrobe() {
+        Renderer r = wardrobeOpen.GetComponent<Renderer>();
+        if (r.sortingOrder == -101) {
+            r.sortingOrder = -99;
+        } else {
+            r.sortingOrder = -101;
+        }
+    }
+
     public void BedInFront() {
         Renderer r = bed.GetComponent<Renderer>();
         r.sortingOrder = 101;
@@ -46,5 +56,16 @@ public class bedroom_controller : MonoBehaviour {
     public void StopSleeping() {
         Renderer r = bedSleeping.GetComponent<Renderer>();
         r.sortingOrder = -101;
+    }
+
+    public void ToggleSleeping() {
+        Renderer r = bedSleeping.GetComponent<Renderer>();
+        if (r.sortingOrder == -101) {
+            r.sortingOrder = 105;
+            pal.SetActive(false);
+        } else {
+            r.sortingOrder = -101;
+            pal.SetActive(true);
+        }
     }
 }
