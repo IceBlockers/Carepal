@@ -23,7 +23,7 @@ public class bedroom : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-        Debug.Log(SceneManager.sceneCount);
+        // check playerprefs for whether or not tutorial has been completed in previous session
 
         bedroomScene = new LevelScene(camera, pal, m_Anim);
         bedroomScene.movementNodes = new List<Node> {

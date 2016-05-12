@@ -25,11 +25,11 @@ public class kitchen : MonoBehaviour {
         kitchenScene = new LevelScene(camera, pal, m_Anim);
         kitchenScene.movementNodes = new List<Node> {
             new Node("n1", new Vector2(3.59f, -1.78f)), // doorway
-            new Node("n2", new Vector2(1.87f, -3.6f)), //  
-            new Node("n3", new Vector2(6.548397f, -3.559552f)), //  
-            new Node("n4", new Vector2(-0.9f, -2.68f)), // 
-            new Node("n5", new Vector2(-4.34f, -2.62f)), //  
-            new Node("n6", new Vector2(-8.67f, -2.72f)), // 
+            new Node("n2", new Vector2(1.87f, -3.6f)), // middle of open kitchen area
+            new Node("n3", new Vector2(6.548397f, -3.559552f)), // fridge
+            new Node("n4", new Vector2(-0.9f, -2.68f)), // near orange counterspace
+            new Node("n5", new Vector2(-4.34f, -2.62f)), // dishes
+            new Node("n6", new Vector2(-8.67f, -2.72f)), // far blue counterspace
             new Node("n7", new Vector2(6.0f,  -0.5f)), // hallway
         };
 
@@ -69,8 +69,7 @@ public class kitchen : MonoBehaviour {
         Node.addAdj(kitchenScene.movementNodes[4], kitchenScene.movementNodes[5]);
 
         // n7 
-        //Node.addAdj(kitchenScene.movementNodes[6], kitchenScene.movementNodes[1]);
-        //Node.addAdj(kitchenScene.movementNodes[1], kitchenScene.movementNodes[6]);
+        Node.addAdj(kitchenScene.movementNodes[6], kitchenScene.movementNodes[0]);
     }
 
     // Update is called once per frame
