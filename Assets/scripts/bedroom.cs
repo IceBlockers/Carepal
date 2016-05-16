@@ -15,33 +15,47 @@ public class bedroom : MonoBehaviour {
     public GameObject bedroomSet;
     private bedroom_controller bedroomScript;
     public GameObject clockObject;
+    public GameObject Canvas;
+    public GameObject greyOverlay;
+    public GameObject sandwich_icon;
+
+    public bool doIntro = false;
+    private static bool created = false;
 
     private void Awake() {
+        if (!created) {
+            DontDestroyOnLoad(Canvas.gameObject);
+            created = true;
+            if (PlayerPrefs.GetInt("Tutorial") == 1) {
+                doIntro = true;
+            }
+        } else {
+            Destroy(Canvas.gameObject);
+            doIntro = false;
+        }
+
         m_Anim = pal.GetComponent<Animator>();
         bedroomScript = bedroomSet.GetComponent<bedroom_controller>();
-    }
 
-    // Use this for initialization
-    void Start () {
-        // check playerprefs for whether or not tutorial has been completed in previous session
 
+        // our initializations previously in start
         bedroomScene = new LevelScene(camera, pal, m_Anim);
         bedroomScene.movementNodes = new List<Node> {
-            new Node("n1", new Vector2(-7.3f, -2.75f)), // dresser
-            new Node("n2", new Vector2(-9.3f, -3.7f)), // door 
-            new Node("n3", new Vector2(-3.9f, -3.7f)), // left-floor 
-            new Node("n4", new Vector2(0f, -3.4f)), // mid-floor
-            new Node("n5", new Vector2(0f, -2.5f)), // desk 
-            new Node("n6", new Vector2(2.5f, -4.6f)), // footbed 
-            new Node("n7", new Vector2(8.6f, -4.6f)), // headbed
-            new Node("n8", new Vector2(5.25f, -2.1f)) // clockbedside
+            new Node(1, new Vector2(-7.3f, -2.75f)), // dresser
+            new Node(2, new Vector2(-9.3f, -3.7f)), // door 
+            new Node(3, new Vector2(-3.9f, -3.7f)), // left-floor 
+            new Node(4, new Vector2(0f, -3.4f)), // mid-floor
+            new Node(5, new Vector2(0f, -2.5f)), // desk 
+            new Node(6, new Vector2(2.5f, -4.6f)), // footbed 
+            new Node(7, new Vector2(8.6f, -4.6f)), // headbed
+            new Node(8, new Vector2(5.25f, -2.1f)) // clockbedside
         };
 
         bedroomScene.clickPos = new Vector3(0, 0, 0);
         createNodeMap();
 
         // define clockBox clickBox and it's animation function delegate
-            // position is center of object - half of width/height
+        // position is center of object - half of width/height
         Clickable clockBox = new Clickable(new Vector2((6.481f - .5f), (0.253f - .5f)), 1, 1, bedroomScene.movementNodes[7]);
         var clockScript = clockObject.GetComponent<clock_controller>();
         clockBox.StartActivity = clockScript.StartRing;
@@ -64,6 +78,25 @@ public class bedroom : MonoBehaviour {
         };
     }
 
+    // Use this for initialization
+    void Start() {
+        // set this for now so i know how its functioning
+        PlayerPrefs.SetInt("Tutorial", 1);
+        Instantiate(sandwich_icon);
+
+        // check if tutorial is true. if it is, do the intro
+        if (doIntro) {
+            Canvas.SetActive(true);
+            greyOverlay.SetActive(true);
+            // pal is in the middle
+            pal.transform.position = bedroomScene.movementNodes[4].position;
+        } else {
+            Canvas.SetActive(false);
+            greyOverlay.SetActive(false);
+            // pal is near the door
+            pal.transform.position = bedroomScene.movementNodes[1].position;
+        }
+    }
     // define node adjacency
     void createNodeMap() {
 
@@ -93,31 +126,24 @@ public class bedroom : MonoBehaviour {
 
     // Update is called once per frame
     void Update() {
-
-        // update object layering for scene
-        if(pal.transform.position.y > -3) {
-            bedroomScript.BedInFront();
-        } else {
-            bedroomScript.BedBehind();
-        }
-
-        // pal has stopped moving: checking for activities to run
-        if (!bedroomScene.isPalMoving()) {
-            
-            // check if there is a recently clicked box not handled
-            if(bedroomScene.clickedBox != null) {
-
-                // if the node finished moving on is the same as the node near the object start the activity
-                if(bedroomScene.clickedBox.nodeNearRect == bedroomScene.palNode) {
-                    bedroomScene.clickedBox.StartActivity();
-                }
-
-                // set the clicked box to null last
-                bedroomScene.clickedBox = null;
+        // check playerprefs for whether or not tutorial has been completed in previous session
+        if (doIntro) {
+            // if we click, the game is playable
+            if (Input.GetMouseButtonDown(0) == true) {
+                Canvas.SetActive(false);
+                greyOverlay.SetActive(false);
+                doIntro = false;  
             }
-        }
+        } else {
+            // update object layering for scene
+            if (pal.transform.position.y > -3) {
+                bedroomScript.BedInFront();
+            } else {
+                bedroomScript.BedBehind();
+            }
 
-        // update the bedroom
-        bedroomScene.sceneUpdate();
+            // update the bedroom
+            bedroomScene.sceneUpdate();
+        }
     }  
 }

@@ -33,6 +33,22 @@ namespace Assets.scripts {
 
         // function to handle scene update logic
         public void sceneUpdate() {
+            // pal has stopped moving: checking for activities to run
+            if (!isPalMoving()) {
+
+                // check if there is a recently clicked box not handled
+                if (clickedBox != null) {
+
+                    // if the node finished moving on is the same as the node near the object start the activity
+                    if (clickedBox.nodeNearRect == palNode) {
+                        clickedBox.StartActivity();
+                    }
+
+                    // set the clicked box to null last
+                    clickedBox = null;
+                }
+            }
+
             // determine node closest to pal first!
             palNode = findClosestNodeToPal(pal.transform.position);
 
@@ -40,6 +56,10 @@ namespace Assets.scripts {
                 handleMouseDown(Input.mousePosition);
             }
             movePal();
+
+            //if (PlayerPrefs.GetFloat("Hunger)
+            // start sandwich game quest: character says they are hungry, speech bubble follows them.
+            // sandwich floating and wiggling on door and fridge
         }
 
         // function to handle mousedown events
@@ -86,7 +106,7 @@ namespace Assets.scripts {
                     moveStack.Push(cur);
                     while ((cur = cur.nextInPath) != null) {
                         moveStack.Push(cur);
-                        Debug.Log(cur.name + " ");
+                        Debug.Log("node " + cur.nodeNumber + ", ");
                     }
 
                     // set normal towards new next node ONCLICK
@@ -160,7 +180,7 @@ namespace Assets.scripts {
         // find the node closest to the click
         Node findClosestNodeToClick(Vector3 click) {
 
-            Node closestNode = new Node("new", new Vector2(0, 0));
+            Node closestNode = new Node(0, new Vector2(0, 0));
             double min = int.MaxValue;
             foreach (Node n in movementNodes) {
 
@@ -178,7 +198,7 @@ namespace Assets.scripts {
         // find the node closest to the click
         public Node findClosestNodeToPal(Vector3 palPosition) {
 
-            Node closestNode = new Node("new", new Vector2(0, 0));
+            Node closestNode = new Node(0, new Vector2(0, 0));
             double min = int.MaxValue;
 
             foreach (Node n in movementNodes) {
@@ -233,7 +253,7 @@ namespace Assets.scripts {
                     if (!adj.visited) {
                         adj.visited = true;
                         adj.nextInPath = vertex;
-                        if (adj.name == clickNode.name) {
+                        if (adj.nodeNumber == clickNode.nodeNumber) {
                             return;
                         }
                         q.Enqueue(adj);
@@ -253,11 +273,11 @@ namespace Assets.scripts {
         public List<Node> adjNodes { private set; get; }
         public bool visited = false;
         public Node nextInPath;
-        public string name;
+        public int nodeNumber;
 
-        public Node(string name, Vector2 position) {
+        public Node(int nodeNumber, Vector2 position) {
             this.position = position;
-            this.name = name;
+            this.nodeNumber = nodeNumber;
 
             adjNodes = new List<Node>();
         }

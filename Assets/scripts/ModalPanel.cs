@@ -30,20 +30,12 @@ public class ModalPanel : BaseModalPanel {
         Buttons[0].onClick.RemoveAllListeners();
         Buttons[0].onClick.AddListener (events[0]);
         Buttons[0].onClick.AddListener (ClosePanel);
+
+        Buttons[0].gameObject.SetActive(true);
+
         
-        Buttons[1].onClick.RemoveAllListeners();
-        Buttons[1].onClick.AddListener (events[1]);
-        Buttons[1].onClick.AddListener (ClosePanel);
-        
-        Buttons[2].onClick.RemoveAllListeners();
-        Buttons[2].onClick.AddListener (events[2]);
-        Buttons[2].onClick.AddListener (ClosePanel);
 
         this.QuestionText.text = question;
-
-        Buttons[0].gameObject.SetActive (true);
-        Buttons[1].gameObject.SetActive (true);
-        Buttons[2].gameObject.SetActive (true);
     }
 
     override public void ClosePanel () {
