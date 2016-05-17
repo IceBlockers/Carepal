@@ -70,6 +70,7 @@ public class SandwichController : MonoBehaviour {
             int spawn = Random.Range(0, spawnPoints.Length);
             if (spawnIndices[spawn] == null)
             {
+                Debug.Log("spawnFood() attempted!");
                 ++spawnCount;
                 if (bigEnough && !breadSpawned)     // Bread icon needs to be spawned before anything else
                 {
@@ -103,9 +104,13 @@ public class SandwichController : MonoBehaviour {
 
     public void replenishFood()
     {
+        Debug.Log("ReplenishFood() called!");
         if (openFaced()) {
-            while (spawnCount < spawnMax)
+            Debug.Log("ReplenishFood() - openFaced TRUE");
+            while (spawnCount < spawnMax) {
+                Debug.Log("ReplenishFood() - spawnFood() called");
                 spawnFood();
+            }
         }
     }
 
