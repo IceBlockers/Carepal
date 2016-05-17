@@ -27,7 +27,12 @@ public class bedroom : MonoBehaviour {
     
 
     private void Awake() {
+
+        // game was just launched
         if (!created) {
+            // set sandwichMade to 0 on game start
+            PlayerPrefs.SetInt("SandwichMade", 0);
+
             DontDestroyOnLoad(onStartTest.gameObject);
             created = true;
             if (PlayerPrefs.GetInt("Tutorial") == 1) {

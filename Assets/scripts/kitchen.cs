@@ -17,13 +17,15 @@ public class kitchen : MonoBehaviour {
     public Text bubbleText;
     public GameObject sandwich_icon;
     public bool displaySandwich = false;
+    public GameObject sandwichToEat;
+    public GameObject EnzymePill;
 
     LevelScene kitchenScene;
 
     private void Awake() {
         m_Anim = pal.GetComponent<Animator>();
         kitchenScript = kitchenSet.GetComponent<kitchen_controller>();
-
+                
         // our initializations previously in start
         kitchenScene = new LevelScene(camera, pal, m_Anim);
         kitchenScene.movementNodes = new List<Node> {
@@ -52,6 +54,17 @@ public class kitchen : MonoBehaviour {
             stairsBox,
             fridgeBox
         };
+
+        if (PlayerPrefs.GetInt("SandwichMade") == 1) {
+            Clickable pillBox = new Clickable(new Vector2(8.537492f - 2f, 0.03424625f - 3.5f), 4, 7, kitchenScene.movementNodes[2]);
+            Clickable sandwichBox = new Clickable(new Vector2(8.537492f - 2f, 0.03424625f - 3.5f), 4, 7, kitchenScene.movementNodes[2]);
+
+            kitchenScene.clickBoxList.Add(pillBox);
+            kitchenScene.clickBoxList.Add(sandwichBox);
+
+            sandwichToEat.SetActive(true);
+            EnzymePill.SetActive(true);
+        }
     }
 
     // Use this for initialization
