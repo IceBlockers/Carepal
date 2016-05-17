@@ -13,6 +13,11 @@ public class kitchen : MonoBehaviour {
     private kitchen_controller kitchenScript;
     private Animator m_Anim;
 
+    public GameObject myCanvas;
+    public Text bubbleText;
+    public GameObject sandwich_icon;
+    public bool displaySandwich = false;
+
     LevelScene kitchenScene;
 
     private void Awake() {
@@ -39,15 +44,19 @@ public class kitchen : MonoBehaviour {
         Clickable stairsBox = new Clickable(new Vector2((3.644229f - 2), (1.755371f - 2)), 4, 4, kitchenScene.movementNodes[6]);
         stairsBox.StartActivity = () => SceneManager.LoadScene("LevelBedroom");
 
+        Clickable fridgeBox = new Clickable(new Vector2(8.537492f - 2f, 0.03424625f - 3.5f), 4, 7, kitchenScene.movementNodes[2]);
+        fridgeBox.StartActivity = () => SceneManager.LoadScene("LevelFridge");
+
         // populate the clickboxlist
         kitchenScene.clickBoxList = new List<Clickable> {
-            stairsBox
+            stairsBox,
+            fridgeBox
         };
     }
 
     // Use this for initialization
     void Start () {
-        
+        myCanvas.transform.position = new Vector2(pal.transform.position.x - 1.2f, pal.transform.position.y + 4.9f);
     }
 
     // define node adjacency
@@ -75,6 +84,11 @@ public class kitchen : MonoBehaviour {
         Node.addAdj(kitchenScene.movementNodes[6], kitchenScene.movementNodes[0]);
     }
 
+    void hungerBubble() {
+        bubbleText.text = "I'm hungry!\n Let's make a sandwich!";
+        myCanvas.SetActive(true);
+    }
+
     // Update is called once per frame
     void Update () {
 
@@ -87,5 +101,18 @@ public class kitchen : MonoBehaviour {
 
         // update the kitchen
         kitchenScene.sceneUpdate();
+
+        myCanvas.transform.position = new Vector2(pal.transform.position.x - 1.2f, pal.transform.position.y + 4.9f);
+
+        var newhunger = PlayerPrefs.GetFloat("Hunger") - (Time.deltaTime * 0.5f);
+        PlayerPrefs.SetFloat("Hunger", newhunger);
+
+        if (PlayerPrefs.GetFloat("Hunger") <= 4) {
+            if (!displaySandwich) {
+                Instantiate(sandwich_icon, new Vector2(7.551609f, -0.1312826f), Quaternion.identity);
+                displaySandwich = true;
+                hungerBubble();
+            }
+        }
     }
 }

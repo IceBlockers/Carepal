@@ -56,10 +56,6 @@ namespace Assets.scripts {
                 handleMouseDown(Input.mousePosition);
             }
             movePal();
-
-            //if (PlayerPrefs.GetFloat("Hunger)
-            // start sandwich game quest: character says they are hungry, speech bubble follows them.
-            // sandwich floating and wiggling on door and fridge
         }
 
         // function to handle mousedown events
