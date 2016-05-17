@@ -8,7 +8,7 @@ public class kitchen_controller : MonoBehaviour {
     
     public void InHallway() {
         Renderer r = kitchen_cutout.GetComponent<Renderer>();
-        r.sortingOrder = 101;
+        r.sortingOrder = 69;
     }
 
     public void InKitchen() {

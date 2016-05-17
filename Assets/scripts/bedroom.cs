@@ -15,33 +15,56 @@ public class bedroom : MonoBehaviour {
     public GameObject bedroomSet;
     private bedroom_controller bedroomScript;
     public GameObject clockObject;
+    public GameObject myCanvas;
+    public GameObject greyOverlay;
+    public GameObject sandwich_icon;
+    public Text bubbleText;
+    public GameObject onStartTest;
+
+    public bool doIntro = false;
+    public bool displaySandwich = false;
+    private static bool created = false;
+    
 
     private void Awake() {
+
+        // game was just launched
+        if (!created) {
+            // set sandwichMade to 0 on game start
+            PlayerPrefs.SetInt("SandwichMade", 0);
+
+            DontDestroyOnLoad(onStartTest.gameObject);
+            created = true;
+            if (PlayerPrefs.GetInt("Tutorial") == 1) {
+                doIntro = true;
+            }
+        } else {
+            Destroy(onStartTest.gameObject);
+            doIntro = false;
+        }
+
         m_Anim = pal.GetComponent<Animator>();
         bedroomScript = bedroomSet.GetComponent<bedroom_controller>();
-    }
 
-    // Use this for initialization
-    void Start () {
-        Debug.Log(SceneManager.sceneCount);
 
+        // our initializations previously in start
         bedroomScene = new LevelScene(camera, pal, m_Anim);
         bedroomScene.movementNodes = new List<Node> {
-            new Node("n1", new Vector2(-7.3f, -2.75f)), // dresser
-            new Node("n2", new Vector2(-9.3f, -3.7f)), // door 
-            new Node("n3", new Vector2(-3.9f, -3.7f)), // left-floor 
-            new Node("n4", new Vector2(0f, -3.4f)), // mid-floor
-            new Node("n5", new Vector2(0f, -2.5f)), // desk 
-            new Node("n6", new Vector2(2.5f, -4.6f)), // footbed 
-            new Node("n7", new Vector2(8.6f, -4.6f)), // headbed
-            new Node("n8", new Vector2(5.25f, -2.1f)) // clockbedside
+            new Node(1, new Vector2(-7.3f, -2.75f)), // dresser
+            new Node(2, new Vector2(-9.3f, -3.7f)), // door 
+            new Node(3, new Vector2(-3.9f, -3.7f)), // left-floor 
+            new Node(4, new Vector2(0f, -3.4f)), // mid-floor
+            new Node(5, new Vector2(0f, -2.5f)), // desk 
+            new Node(6, new Vector2(2.5f, -4.6f)), // footbed 
+            new Node(7, new Vector2(8.6f, -4.6f)), // headbed
+            new Node(8, new Vector2(5.25f, -2.1f)) // clockbedside
         };
 
         bedroomScene.clickPos = new Vector3(0, 0, 0);
         createNodeMap();
 
         // define clockBox clickBox and it's animation function delegate
-            // position is center of object - half of width/height
+        // position is center of object - half of width/height
         Clickable clockBox = new Clickable(new Vector2((6.481f - .5f), (0.253f - .5f)), 1, 1, bedroomScene.movementNodes[7]);
         var clockScript = clockObject.GetComponent<clock_controller>();
         clockBox.StartActivity = clockScript.StartRing;
@@ -64,6 +87,28 @@ public class bedroom : MonoBehaviour {
         };
     }
 
+    // Use this for initialization
+    void Start() {
+        // start the bubble over the pal
+        myCanvas.transform.position = new Vector2(pal.transform.position.x + 1.2f, pal.transform.position.y + 5.9f);
+
+        // if tutorial is true, set the hunger to this value to trigger hunger soon
+        if (PlayerPrefs.GetInt("Tutorial") == 1) {
+            PlayerPrefs.SetFloat("Hunger", 5);
+        }
+        // check if tutorial is true. if it is, do the intro
+        if (doIntro) {
+            myCanvas.SetActive(true);
+            greyOverlay.SetActive(true);
+            // pal is in the middle
+            pal.transform.position = bedroomScene.movementNodes[4].position;
+        } else {
+            myCanvas.SetActive(false);
+            greyOverlay.SetActive(false);
+            // pal is near the door
+            pal.transform.position = bedroomScene.movementNodes[1].position;
+        }
+    }
     // define node adjacency
     void createNodeMap() {
 
@@ -91,33 +136,49 @@ public class bedroom : MonoBehaviour {
         Node.addAdj(bedroomScene.movementNodes[6], bedroomScene.movementNodes[5]);
     }
 
+    void hungerBubble() {
+        bubbleText.text = "I'm hungry!\n Let's make a sandwich!";
+        myCanvas.SetActive(true);
+    }
+
     // Update is called once per frame
     void Update() {
-
-        // update object layering for scene
-        if(pal.transform.position.y > -3) {
-            bedroomScript.BedInFront();
-        } else {
-            bedroomScript.BedBehind();
-        }
-
-        // pal has stopped moving: checking for activities to run
-        if (!bedroomScene.isPalMoving()) {
-            
-            // check if there is a recently clicked box not handled
-            if(bedroomScene.clickedBox != null) {
-
-                // if the node finished moving on is the same as the node near the object start the activity
-                if(bedroomScene.clickedBox.nodeNearRect == bedroomScene.palNode) {
-                    bedroomScene.clickedBox.StartActivity();
-                }
-
-                // set the clicked box to null last
-                bedroomScene.clickedBox = null;
+        // check playerprefs for whether or not tutorial has been completed in previous session
+        if (doIntro) {
+            // if we click, the game is playable
+            if (Input.GetMouseButtonDown(0) == true) {
+                myCanvas.SetActive(false);
+                greyOverlay.SetActive(false);
+                doIntro = false;  
             }
+        } else {
+            // update object layering for scene
+            if (pal.transform.position.y > -3) {
+                bedroomScript.BedInFront();
+            } else {
+                bedroomScript.BedBehind();
+            }
+
+            // update the bedroom
+            bedroomScene.sceneUpdate();
         }
 
-        // update the bedroom
-        bedroomScene.sceneUpdate();
+        // move the speech bubble over the pal on each frame
+        myCanvas.transform.position = new Vector2(pal.transform.position.x + 1.2f, pal.transform.position.y + 5.9f);
+
+        // update the pal's hunger on each frame
+        if(!doIntro) {
+            var newhunger = PlayerPrefs.GetFloat("Hunger") - (Time.deltaTime * 0.5f);
+            PlayerPrefs.SetFloat("Hunger", newhunger);
+        }        
+        // start sandwich game quest: character says they are hungry, speech bubble follows them.
+        // sandwich floating and wiggling on door and fridge
+        if (PlayerPrefs.GetFloat("Hunger") <= 4) {
+            if(!displaySandwich) {
+                Instantiate(sandwich_icon);
+                displaySandwich = true;
+                hungerBubble();
+            }  
+        }
     }  
 }

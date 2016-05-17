@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Events;
 
 class HungerBar : MonoBehaviour {
 	 
@@ -12,6 +13,7 @@ class HungerBar : MonoBehaviour {
 	private const float maxHunger = 5.0f; 	// maximum value for hunger
 	private float curHunger = 5.0f;
 	private float hungerTimer = 0.0f;
+    public UnityEvent HungryEvent;
 	 
 	 private void Start() {
 		 // preserve bar between scenes
@@ -40,11 +42,14 @@ class HungerBar : MonoBehaviour {
 	 
 	 private void Update()
 	 {
-		 // handle logic for decreaing hunger
+		 // handle logic for decreasing hunger
 		if (curHunger > 0 && (hungerTimer += Time.deltaTime) >= hungerTimerThreshold) {
 			curHunger = (curHunger == 0 ? 0 : curHunger -= 1.0f);
 			barDisplay = curHunger / maxHunger;
 			hungerTimer = 0.0f;
 		}
+        if(curHunger <= 4f) {
+            //EventManager.StartListening("Hungry", )
+        }
 	 }
  }
