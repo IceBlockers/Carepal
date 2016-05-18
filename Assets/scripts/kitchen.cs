@@ -95,6 +95,7 @@ public class kitchen : MonoBehaviour {
             if (newhunger > 5) newhunger = 5;
             PlayerPrefs.SetFloat("Hunger", newhunger);
             PlayerPrefs.SetInt("SandwichMade", 0);
+            PlayerPrefs.SetInt("AteEnzyme", 0);
 
             myCanvas.SetActive(true);
             bubbleText.text = "Yum!";
