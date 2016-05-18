@@ -19,6 +19,7 @@ public class kitchen : MonoBehaviour {
     public bool displaySandwich = false;
     public GameObject sandwichToEat;
     public GameObject EnzymePill;
+    public float bubbleLifeCount = 0f;
 
     LevelScene kitchenScene;
 
@@ -56,20 +57,58 @@ public class kitchen : MonoBehaviour {
         };
 
         if (PlayerPrefs.GetInt("SandwichMade") == 1) {
-            Clickable pillBox = new Clickable(new Vector2(8.537492f - 2f, 0.03424625f - 3.5f), 4, 7, kitchenScene.movementNodes[2]);
-            Clickable sandwichBox = new Clickable(new Vector2(8.537492f - 2f, 0.03424625f - 3.5f), 4, 7, kitchenScene.movementNodes[2]);
+            Clickable pillBox = new Clickable(new Vector2(-2.32f - 1f, 0.92f - 1f), 2, 2, kitchenScene.movementNodes[3]);
+            pillBox.StartActivity = () => clickEnzymeToEat();
 
-            kitchenScene.clickBoxList.Add(pillBox);
+            Clickable sandwichBox = new Clickable(new Vector2(-0.81f - 1f, 0.69f - 1f), 2, 2, kitchenScene.movementNodes[3]);
+            sandwichBox.StartActivity = () => clickSandwichToEat();
+
             kitchenScene.clickBoxList.Add(sandwichBox);
+            kitchenScene.clickBoxList.Add(pillBox);
+            kitchenScene.clickBoxList.Reverse();
 
             sandwichToEat.SetActive(true);
             EnzymePill.SetActive(true);
         }
     }
 
+    void clickEnzymeToEat() {
+        // disable visibility of pill and remove clickbox from list
+        EnzymePill.SetActive(false);
+        PlayerPrefs.SetInt("AteEnzyme", 1);
+        kitchenScene.clickBoxList.RemoveAt(0);
+
+        myCanvas.SetActive(true);
+        bubbleText.text = "Sandwich time!";
+    }
+
+    void clickSandwichToEat() {
+       if(PlayerPrefs.GetInt("AteEnzyme") == 1) {
+            // disable visibility of sandwich and remove clickbox from list
+            sandwichToEat.SetActive(false);
+            kitchenScene.clickBoxList.RemoveAt(0);
+
+            // update hunger to reflect eating sandwich!
+            var newhunger = PlayerPrefs.GetFloat("Hunger") + 4;
+            if (newhunger > 5) newhunger = 5;
+            PlayerPrefs.SetFloat("Hunger", newhunger);
+
+            myCanvas.SetActive(true);
+            bubbleText.text = "Yum!";
+        } else {
+            myCanvas.SetActive(true);
+            bubbleText.text = "I need the\n enzyme pill first!";
+        }
+    }
+
     // Use this for initialization
     void Start () {
         myCanvas.transform.position = new Vector2(pal.transform.position.x - 1.2f, pal.transform.position.y + 4.9f);
+        myCanvas.SetActive(true);
+
+        if (PlayerPrefs.GetInt("SandwichMade") == 1) {
+            bubbleText.text = "Looks tasty!";
+        }
     }
 
     // define node adjacency
@@ -97,9 +136,25 @@ public class kitchen : MonoBehaviour {
         Node.addAdj(kitchenScene.movementNodes[6], kitchenScene.movementNodes[0]);
     }
 
-    void hungerBubble() {
-        bubbleText.text = "I'm hungry!\n Let's make a sandwich!";
-        myCanvas.SetActive(true);
+    void hungerBubble() {       
+        // if they are hungry or not, display the need text
+        if (PlayerPrefs.GetFloat("Hunger") <= 4) {
+            //myCanvas.SetActive(true);
+            if(PlayerPrefs.GetInt("SandwichMade") == 0) {
+                bubbleText.text = "I'm hungry!\n Let's make a \n sandwich!";
+            }
+        }
+    }
+
+    void bubbleLifetime() {
+        if(myCanvas.activeSelf == true) {
+            if (bubbleLifeCount > 4) {
+                myCanvas.SetActive(false);
+                bubbleLifeCount = 0f;
+            } else {
+                bubbleLifeCount += Time.deltaTime;
+            }
+        }
     }
 
     // Update is called once per frame
@@ -124,8 +179,18 @@ public class kitchen : MonoBehaviour {
             if (!displaySandwich) {
                 Instantiate(sandwich_icon, new Vector2(7.551609f, -0.1312826f), Quaternion.identity);
                 displaySandwich = true;
-                hungerBubble();
+                
+            }
+        } else {
+            if (displaySandwich) {
+                Destroy(sandwich_icon);
             }
         }
+        // logic of whether or not to display the hunger bubble
+        // if sandwich is made
+        hungerBubble();
+
+        // check bubble lifetime
+        bubbleLifetime();
     }
 }

@@ -27,6 +27,7 @@ public class bedroom : MonoBehaviour {
     
 
     private void Awake() {
+        PlayerPrefs.SetInt("Tutorial", 1);
 
         // game was just launched
         if (!created) {
@@ -37,6 +38,8 @@ public class bedroom : MonoBehaviour {
             created = true;
             if (PlayerPrefs.GetInt("Tutorial") == 1) {
                 doIntro = true;
+            } else {
+                doIntro = false;
             }
         } else {
             Destroy(onStartTest.gameObject);
@@ -95,6 +98,8 @@ public class bedroom : MonoBehaviour {
         // if tutorial is true, set the hunger to this value to trigger hunger soon
         if (PlayerPrefs.GetInt("Tutorial") == 1) {
             PlayerPrefs.SetFloat("Hunger", 5);
+            PlayerPrefs.SetInt("AteEnzyme", 0);
+            PlayerPrefs.SetInt("SandwichMade", 0);
         }
         // check if tutorial is true. if it is, do the intro
         if (doIntro) {
@@ -137,7 +142,7 @@ public class bedroom : MonoBehaviour {
     }
 
     void hungerBubble() {
-        bubbleText.text = "I'm hungry!\n Let's make a sandwich!";
+        bubbleText.text = "I'm hungry!\n Let's make a \n sandwich!";
         myCanvas.SetActive(true);
     }
 
@@ -179,6 +184,10 @@ public class bedroom : MonoBehaviour {
                 displaySandwich = true;
                 hungerBubble();
             }  
+        } else {
+            if(displaySandwich) {
+                Destroy(sandwich_icon);
+            } 
         }
     }  
 }
