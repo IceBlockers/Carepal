@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class FoodController : MonoBehaviour {
-    public float speed;
+    public float speed = 5;
     
     private Vector3 target;
     private Vector3 origin;
