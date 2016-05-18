@@ -79,6 +79,8 @@ public class kitchen : MonoBehaviour {
         EnzymePill.SetActive(false);
         PlayerPrefs.SetInt("AteEnzyme", 1);
         kitchenScene.clickBoxList.RemoveAt(0);
+
+        myCanvas.SetActive(true);
         bubbleText.text = "Sandwich time!";
     }
 
@@ -92,8 +94,11 @@ public class kitchen : MonoBehaviour {
             var newhunger = PlayerPrefs.GetFloat("Hunger") + 4;
             if (newhunger > 5) newhunger = 5;
             PlayerPrefs.SetFloat("Hunger", newhunger);
+
+            myCanvas.SetActive(true);
             bubbleText.text = "Yum!";
         } else {
+            myCanvas.SetActive(true);
             bubbleText.text = "I need the\n enzyme pill first!";
         }
     }
@@ -101,9 +106,9 @@ public class kitchen : MonoBehaviour {
     // Use this for initialization
     void Start () {
         myCanvas.transform.position = new Vector2(pal.transform.position.x - 1.2f, pal.transform.position.y + 4.9f);
+        myCanvas.SetActive(true);
 
         if (PlayerPrefs.GetInt("SandwichMade") == 1) {
-            myCanvas.SetActive(true);
             bubbleText.text = "Looks tasty!";
         }
     }
@@ -136,7 +141,7 @@ public class kitchen : MonoBehaviour {
     void hungerBubble() {       
         // if they are hungry or not, display the need text
         if (PlayerPrefs.GetFloat("Hunger") <= 4) {
-            myCanvas.SetActive(true);
+            //myCanvas.SetActive(true);
             if(PlayerPrefs.GetInt("SandwichMade") == 0) {
                 bubbleText.text = "I'm hungry!\n Let's make a \n sandwich!";
             }
@@ -144,8 +149,13 @@ public class kitchen : MonoBehaviour {
     }
 
     void bubbleLifetime() {
-        if (bubbleLifeCount > 4) {
-            myCanvas.SetActive(false);
+        if(myCanvas.activeSelf == true) {
+            if (bubbleLifeCount > 4) {
+                myCanvas.SetActive(false);
+                bubbleLifeCount = 0f;
+            } else {
+                bubbleLifeCount += Time.deltaTime;
+            }
         }
     }
 
@@ -177,5 +187,8 @@ public class kitchen : MonoBehaviour {
         // logic of whether or not to display the hunger bubble
         // if sandwich is made
         hungerBubble();
+
+        // check bubble lifetime
+        bubbleLifetime();
     }
 }
