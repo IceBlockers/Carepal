@@ -10,6 +10,7 @@ public class bedroom_controller : MonoBehaviour {
     public GameObject bedSleeping;
 	public AudioClip wardrobeClip;
 	public AudioClip sleepingClip;
+    private bool inBed = false;
 
     public void OpenDoor() {
         Renderer r = door.GetComponent<Renderer>();
@@ -59,29 +60,34 @@ public class bedroom_controller : MonoBehaviour {
     public void StartSleeping() {
         Renderer r = bedSleeping.GetComponent<Renderer>();
         r.sortingOrder = 101;
-		
+        inBed = true;
     }
 
     public void StopSleeping() {
         Renderer r = bedSleeping.GetComponent<Renderer>();
         r.sortingOrder = -101;
+        inBed = false;
     }
 
     public void ToggleSleeping() {
         Renderer r = bedSleeping.GetComponent<Renderer>();
-        if (r.sortingOrder == -101) {
-            r.sortingOrder = 105;
-            pal.SetActive(false);
-			// play sound
-			AudioSource src = GetComponent<AudioSource>();
-			if (sleepingClip && !src.isPlaying) {
-				src.clip = sleepingClip;
-				src.Play();
-			}
-        } else {
+        if (inBed) {
             r.sortingOrder = -101;
-            pal.SetActive(true);
+            pal.transform.Translate(new Vector3(0, 1000, 0));
+        } else {
+            r.sortingOrder = 105;
+            pal.transform.Translate(new Vector3(0, -1000, 0));
+            // play sound
+            AudioSource src = GetComponent<AudioSource>();
+            if (sleepingClip && !src.isPlaying) {
+                src.clip = sleepingClip;
+                src.Play();
+            }
         }
+        inBed = !inBed;
+    }
 
+    public bool isInBed() {
+        return inBed;
     }
 }

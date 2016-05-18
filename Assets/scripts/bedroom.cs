@@ -166,8 +166,13 @@ public class bedroom : MonoBehaviour {
                 bedroomScript.BedBehind();
             }
 
-            // update the bedroom
-            bedroomScene.sceneUpdate();
+            //If the player is in bed, any click will cause them to leave the bed.
+            if (Input.GetMouseButtonDown(0) == true && bedroomScript.isInBed()) {
+                bedroomScript.ToggleSleeping();
+            } else {
+                // update the bedroom
+                bedroomScene.sceneUpdate();
+            }
         }
 
         // move the speech bubble over the pal on each frame
