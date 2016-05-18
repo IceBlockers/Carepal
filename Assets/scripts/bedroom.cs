@@ -34,7 +34,8 @@ public class bedroom : MonoBehaviour {
             // set sandwichMade to 0 on game start
             PlayerPrefs.SetInt("SandwichMade", 0);
 
-            DontDestroyOnLoad(onStartTest.gameObject);
+            //This will break on Android if onStartTest is null
+            //DontDestroyOnLoad(onStartTest.gameObject);
             created = true;
             if (PlayerPrefs.GetInt("Tutorial") == 1) {
                 doIntro = true;
@@ -42,7 +43,8 @@ public class bedroom : MonoBehaviour {
                 doIntro = false;
             }
         } else {
-            Destroy(onStartTest.gameObject);
+            //This will break on Android if onStartTest is null
+            //Destroy(onStartTest.gameObject);
             doIntro = false;
         }
 
