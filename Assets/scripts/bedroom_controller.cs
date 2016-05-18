@@ -8,6 +8,8 @@ public class bedroom_controller : MonoBehaviour {
     public GameObject bed;
     public GameObject pal;
     public GameObject bedSleeping;
+	public AudioClip wardrobeClip;
+	public AudioClip sleepingClip;
 
     public void OpenDoor() {
         Renderer r = door.GetComponent<Renderer>();
@@ -22,6 +24,7 @@ public class bedroom_controller : MonoBehaviour {
     public void OpenWardrobe() {
         Renderer r = wardrobeOpen.GetComponent<Renderer>();
         r.sortingOrder = -99;
+
     }
 
     public void CloseWardrobe() {
@@ -36,6 +39,11 @@ public class bedroom_controller : MonoBehaviour {
         } else {
             r.sortingOrder = -101;
         }
+		AudioSource src = GetComponent<AudioSource>();
+		if (wardrobeClip && !src.isPlaying) {
+			src.clip = wardrobeClip;
+			src.Play();
+		}
     }
 
     public void BedInFront() {
@@ -51,6 +59,7 @@ public class bedroom_controller : MonoBehaviour {
     public void StartSleeping() {
         Renderer r = bedSleeping.GetComponent<Renderer>();
         r.sortingOrder = 101;
+		
     }
 
     public void StopSleeping() {
@@ -63,9 +72,16 @@ public class bedroom_controller : MonoBehaviour {
         if (r.sortingOrder == -101) {
             r.sortingOrder = 105;
             pal.SetActive(false);
+			// play sound
+			AudioSource src = GetComponent<AudioSource>();
+			if (sleepingClip && !src.isPlaying) {
+				src.clip = sleepingClip;
+				src.Play();
+			}
         } else {
             r.sortingOrder = -101;
             pal.SetActive(true);
         }
+
     }
 }
