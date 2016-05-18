@@ -20,6 +20,7 @@ public class kitchen : MonoBehaviour {
     public GameObject sandwichToEat;
     public GameObject EnzymePill;
     public float bubbleLifeCount = 0f;
+    GameObject sandwich_instance;
 
     LevelScene kitchenScene;
 
@@ -80,6 +81,7 @@ public class kitchen : MonoBehaviour {
 
         myCanvas.SetActive(true);
         bubbleText.text = "Sandwich time!";
+        bubbleLifeCount = 0f;
     }
 
     void clickSandwichToEat() {
@@ -89,15 +91,18 @@ public class kitchen : MonoBehaviour {
             kitchenScene.clickBoxList.RemoveAt(0);
 
             // update hunger to reflect eating sandwich!
-            var newhunger = PlayerPrefs.GetFloat("Hunger") + 4;
+            var newhunger = PlayerPrefs.GetFloat("Hunger") + 5;
             if (newhunger > 5) newhunger = 5;
             PlayerPrefs.SetFloat("Hunger", newhunger);
+            PlayerPrefs.SetInt("SandwichMade", 0);
 
             myCanvas.SetActive(true);
             bubbleText.text = "Yum!";
+            bubbleLifeCount = 0f;
         } else {
             myCanvas.SetActive(true);
             bubbleText.text = "I need the\n enzyme pill first!";
+            bubbleLifeCount = 0f;
         }
     }
 
@@ -108,6 +113,7 @@ public class kitchen : MonoBehaviour {
 
         if (PlayerPrefs.GetInt("SandwichMade") == 1) {
             bubbleText.text = "Looks tasty!";
+            Destroy(sandwich_instance);
         }
     }
 
@@ -138,10 +144,11 @@ public class kitchen : MonoBehaviour {
 
     void hungerBubble() {       
         // if they are hungry or not, display the need text
-        if (PlayerPrefs.GetFloat("Hunger") <= 4) {
+        if (PlayerPrefs.GetFloat("Hunger") <= 3) {
             //myCanvas.SetActive(true);
             if(PlayerPrefs.GetInt("SandwichMade") == 0) {
                 bubbleText.text = "I'm hungry!\n Let's make a \n sandwich!";
+                bubbleLifeCount = 0f;
             }
         }
     }
@@ -175,15 +182,17 @@ public class kitchen : MonoBehaviour {
         var newhunger = PlayerPrefs.GetFloat("Hunger") - (Time.deltaTime * 0.5f);
         PlayerPrefs.SetFloat("Hunger", newhunger);
 
-        if (PlayerPrefs.GetFloat("Hunger") <= 4) {
+        if (PlayerPrefs.GetFloat("Hunger") <= 3) {
             if (!displaySandwich) {
-                Instantiate(sandwich_icon, new Vector2(7.551609f, -0.1312826f), Quaternion.identity);
-                displaySandwich = true;
-                
+                if(PlayerPrefs.GetInt("SandwichMade") == 0) {
+                    sandwich_instance = (GameObject)Instantiate(sandwich_icon, new Vector2(7.551609f, -0.1312826f), Quaternion.identity);
+                    displaySandwich = true;
+                } 
             }
         } else {
             if (displaySandwich) {
-                Destroy(sandwich_icon);
+                Destroy(sandwich_instance);
+                displaySandwich = false;
             }
         }
         // logic of whether or not to display the hunger bubble

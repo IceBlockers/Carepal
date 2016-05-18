@@ -27,7 +27,8 @@ public class bedroom : MonoBehaviour {
     
 
     private void Awake() {
-        PlayerPrefs.SetInt("Tutorial", 1);
+        //PlayerPrefs.SetInt("Tutorial", 1);
+        Debug.Log(PlayerPrefs.GetInt("Tutorial"));
 
         // game was just launched
         if (!created) {
@@ -97,7 +98,7 @@ public class bedroom : MonoBehaviour {
 
         // if tutorial is true, set the hunger to this value to trigger hunger soon
         if (PlayerPrefs.GetInt("Tutorial") == 1) {
-            PlayerPrefs.SetFloat("Hunger", 5);
+            PlayerPrefs.SetFloat("Hunger", 4);
             PlayerPrefs.SetInt("AteEnzyme", 0);
             PlayerPrefs.SetInt("SandwichMade", 0);
         }
@@ -178,7 +179,7 @@ public class bedroom : MonoBehaviour {
         }        
         // start sandwich game quest: character says they are hungry, speech bubble follows them.
         // sandwich floating and wiggling on door and fridge
-        if (PlayerPrefs.GetFloat("Hunger") <= 4) {
+        if (PlayerPrefs.GetFloat("Hunger") <= 3) {
             if(!displaySandwich) {
                 Instantiate(sandwich_icon);
                 displaySandwich = true;
@@ -186,7 +187,8 @@ public class bedroom : MonoBehaviour {
             }  
         } else {
             if(displaySandwich) {
-                Destroy(sandwich_icon);
+                DestroyImmediate(sandwich_icon, true);
+                displaySandwich = false;
             } 
         }
     }  
