@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 
 public class SandwichController : MonoBehaviour {
     public List<Object> foodIcons;
@@ -26,12 +27,17 @@ public class SandwichController : MonoBehaviour {
     private bool sandwichComplete = false;      // Nothing more can be added to sandwich once complete
     private GameObject salt;
     private object topLock = new Object();
+    private int[] passedIngreds = new int[3];
 
     // Use this for initialization
     void Start () {
         ingredients.Add(GameObject.Find("/bread").transform);
         breadPos = ingredients[0].position;
         breadPos.y = 6;
+
+        passedIngreds[0] = PlayerPrefs.GetInt("food1");
+        passedIngreds[1] = PlayerPrefs.GetInt("food2");
+        passedIngreds[2] = PlayerPrefs.GetInt("food3");
 
         spawnPoints = GameObject.FindGameObjectsWithTag("Respawn");
         Debug.Log("Spawn Points: " + spawnPoints.Length);
@@ -70,6 +76,7 @@ public class SandwichController : MonoBehaviour {
             int spawn = Random.Range(0, spawnPoints.Length);
             if (spawnIndices[spawn] == null)
             {
+                Debug.Log("spawnFood() attempted!");
                 ++spawnCount;
                 if (bigEnough && !breadSpawned)     // Bread icon needs to be spawned before anything else
                 {
@@ -78,8 +85,8 @@ public class SandwichController : MonoBehaviour {
                 }
                 else
                 {
-                int foodNo = Random.Range(0, foodIcons.Count);
-                spawnIndices[spawn] = Instantiate(foodIcons[foodNo], spawnPoints[spawn].transform.position, Quaternion.identity);
+                int foodNo = Random.Range(0, 3);
+                spawnIndices[spawn] = Instantiate(foodIcons[passedIngreds[foodNo]], spawnPoints[spawn].transform.position, Quaternion.identity);
                 }
             break;              
             }
@@ -103,9 +110,13 @@ public class SandwichController : MonoBehaviour {
 
     public void replenishFood()
     {
+        Debug.Log("ReplenishFood() called!");
         if (openFaced()) {
-            while (spawnCount < spawnMax)
+            Debug.Log("ReplenishFood() - openFaced TRUE");
+            while (spawnCount < spawnMax) {
+                Debug.Log("ReplenishFood() - spawnFood() called");
                 spawnFood();
+            }
         }
     }
 
@@ -169,5 +180,14 @@ public class SandwichController : MonoBehaviour {
     private void actuallyDropBread()
     {
         Instantiate(topBread, breadPos, Quaternion.identity);
+
+        
+        Invoke("exitRoom", 5);
+    }
+
+    private void exitRoom() {
+        PlayerPrefs.SetInt("SandwichMade", 1);
+        PlayerPrefs.SetInt("Tutorial", 0);
+        SceneManager.LoadScene("LevelKitchen");
     }
 }
