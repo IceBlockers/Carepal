@@ -95,6 +95,7 @@ public class bedroom : MonoBehaviour {
         // if tutorial is true, set the hunger to this value to trigger hunger soon
         if (PlayerPrefs.GetInt("Tutorial") == 1) {
             PlayerPrefs.SetFloat("Hunger", 5);
+            PlayerPrefs.SetInt("AteEnzyme", 0);
         }
         // check if tutorial is true. if it is, do the intro
         if (doIntro) {
@@ -137,7 +138,7 @@ public class bedroom : MonoBehaviour {
     }
 
     void hungerBubble() {
-        bubbleText.text = "I'm hungry!\n Let's make a sandwich!";
+        bubbleText.text = "I'm hungry!\n Let's make a \n sandwich!";
         myCanvas.SetActive(true);
     }
 
