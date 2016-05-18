@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class fridge : MonoBehaviour {
 
@@ -46,9 +47,8 @@ public class fridge : MonoBehaviour {
                     //you clicked the arrow button.
                     //Debug.Log("Moving on to the next scene!");
                     saveChoices();
-                    
-                    //TODO:  Load new level here
 
+                    SceneManager.LoadScene("LevelMinigame");
                 }
                 updateButton();
             }
