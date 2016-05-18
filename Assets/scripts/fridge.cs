@@ -48,7 +48,6 @@ public class fridge : MonoBehaviour {
                     //Debug.Log("Moving on to the next scene!");
                     saveChoices();
 
-                    //TODO:  Load new level here
                     SceneManager.LoadScene("LevelMinigame");
                 }
                 updateButton();
