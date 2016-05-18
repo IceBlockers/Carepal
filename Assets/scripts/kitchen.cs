@@ -88,7 +88,7 @@ public class kitchen : MonoBehaviour {
             // disable visibility of sandwich and remove clickbox from list
             sandwichToEat.SetActive(false);
             Vector3 starPos = pal.transform.position;
-            starPos.y += 2; // +2 to center on character, rather than char's feet.
+            starPos.y += 2.5f; // +2.5 to center near upper character, rather than char's feet.
             Instantiate(starsPrefab, starPos, Quaternion.identity);
             kitchenScene.clickBoxList.RemoveAt(0);
 
