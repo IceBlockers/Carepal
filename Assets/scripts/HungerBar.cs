@@ -13,8 +13,7 @@ class HungerBar : MonoBehaviour {
 	private const float maxHunger = 5.0f; 	// maximum value for hunger
 	private float curHunger = 5.0f;
 	private float hungerTimer = 0.0f;
-	
-	public UnityEvent test;
+    public UnityEvent HungryEvent;
 	 
 	 private void Start() {
 		 // preserve bar between scenes
@@ -43,28 +42,7 @@ class HungerBar : MonoBehaviour {
 	 
 	 private void Update()
 	 {
-		 // handle logic for decreaing hunger
-		if (curHunger > 0 && (hungerTimer += Time.deltaTime) >= hungerTimerThreshold) {
-			curHunger = (curHunger == 0 ? 0 : curHunger -= 1.0f);
-			barDisplay = curHunger / maxHunger;
-			hungerTimer = 0.0f;
-		
-			if (curHunger == 4.0f) {
-				//test.Invoke();
-				//EventManager.AddEvent("Hunger", test);
-				EventManager.StartListening("Hunger", hungerMethod);
-			} else if (curHunger == 5.0f) {
-				//EventManager.RemoveEvent("Hunger");
-				EventManager.StopListening("Hunger", hungerMethod);
-			} else if (curHunger < 4.0f) {
-				EventManager.TriggerEvent("Hunger");
-			}
-		
-		}
-	 }
-	 
-	 public void hungerMethod() {
-		 Debug.Log("hungerMethod");
-		 EventManager.StopListening("Hunger", hungerMethod);
+        //read hunger/fullness level from PlayerPrefs
+        barDisplay = PlayerPrefs.GetFloat("Hunger") / maxHunger;
 	 }
  }
