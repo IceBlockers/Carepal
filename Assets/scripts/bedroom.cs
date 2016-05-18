@@ -37,6 +37,8 @@ public class bedroom : MonoBehaviour {
             created = true;
             if (PlayerPrefs.GetInt("Tutorial") == 1) {
                 doIntro = true;
+            } else {
+                doIntro = false;
             }
         } else {
             Destroy(onStartTest.gameObject);
@@ -96,6 +98,7 @@ public class bedroom : MonoBehaviour {
         if (PlayerPrefs.GetInt("Tutorial") == 1) {
             PlayerPrefs.SetFloat("Hunger", 5);
             PlayerPrefs.SetInt("AteEnzyme", 0);
+            PlayerPrefs.SetInt("SandwichMade", 0);
         }
         // check if tutorial is true. if it is, do the intro
         if (doIntro) {
@@ -180,6 +183,10 @@ public class bedroom : MonoBehaviour {
                 displaySandwich = true;
                 hungerBubble();
             }  
+        } else {
+            if(displaySandwich) {
+                Destroy(sandwich_icon);
+            } 
         }
     }  
 }

@@ -56,8 +56,6 @@ public class kitchen : MonoBehaviour {
             fridgeBox
         };
 
-        PlayerPrefs.SetInt("SandwichMade", 1);
-
         if (PlayerPrefs.GetInt("SandwichMade") == 1) {
             Clickable pillBox = new Clickable(new Vector2(-2.32f - 1f, 0.92f - 1f), 2, 2, kitchenScene.movementNodes[3]);
             pillBox.StartActivity = () => clickEnzymeToEat();
@@ -182,6 +180,10 @@ public class kitchen : MonoBehaviour {
                 Instantiate(sandwich_icon, new Vector2(7.551609f, -0.1312826f), Quaternion.identity);
                 displaySandwich = true;
                 
+            }
+        } else {
+            if (displaySandwich) {
+                Destroy(sandwich_icon);
             }
         }
         // logic of whether or not to display the hunger bubble
