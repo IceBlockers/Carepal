@@ -42,14 +42,7 @@ class HungerBar : MonoBehaviour {
 	 
 	 private void Update()
 	 {
-		 // handle logic for decreasing hunger
-		if (curHunger > 0 && (hungerTimer += Time.deltaTime) >= hungerTimerThreshold) {
-			curHunger = (curHunger == 0 ? 0 : curHunger -= 1.0f);
-			barDisplay = curHunger / maxHunger;
-			hungerTimer = 0.0f;
-		}
-        if(curHunger <= 4f) {
-            //EventManager.StartListening("Hungry", )
-        }
+        //read hunger/fullness level from PlayerPrefs
+        barDisplay = PlayerPrefs.GetFloat("Hunger") / maxHunger;
 	 }
  }

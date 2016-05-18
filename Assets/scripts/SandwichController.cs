@@ -6,8 +6,9 @@ using UnityEngine.SceneManagement;
 
 public class SandwichController : MonoBehaviour {
     public List<Object> foodIcons;
-    public float spacing;
-    public float breadSpacing;
+    public float spacing;               // Spacing between ingredients
+    public float breadSpacing;          // Spacing between bottom bread & first ingredient
+    public float topBreadSpacing;       // Spacing between top bread and top ingredient
     public int maxSandwichSize;
     public int sandwichThreshold;   // No of ingredients before bread appears and sandwich can be completed
     public GameObject topBread;
@@ -143,7 +144,7 @@ public class SandwichController : MonoBehaviour {
         // If new ingredient is the final piece of bread, add extra space for fine-tuning
         if (newIngredient.CompareTag("bread"))
         {
-            result.y += breadSpacing;
+            result.y += topBreadSpacing;
             Debug.Log("Ingredient " + (ingredients.Count - 1) + " is bread!");
         }
 
