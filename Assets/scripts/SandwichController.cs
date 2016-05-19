@@ -27,7 +27,7 @@ public class SandwichController : MonoBehaviour {
     private bool breadSpawned = false;  // Has bread icon been spawned? (only happens once)
     private bool sandwichComplete = false;      // Nothing more can be added to sandwich once complete
     private GameObject salt;
-    private object topLock = new Object();
+    // private object topLock = new Object();
     private int[] passedIngreds = new int[3];
 
     // Use this for initialization
@@ -77,7 +77,7 @@ public class SandwichController : MonoBehaviour {
             int spawn = Random.Range(0, spawnPoints.Length);
             if (spawnIndices[spawn] == null)
             {
-                Debug.Log("spawnFood() attempted!");
+                // Debug.Log("spawnFood() attempted!");
                 ++spawnCount;
                 if (bigEnough && !breadSpawned)     // Bread icon needs to be spawned before anything else
                 {
@@ -111,11 +111,11 @@ public class SandwichController : MonoBehaviour {
 
     public void replenishFood()
     {
-        Debug.Log("ReplenishFood() called!");
+        // Debug.Log("ReplenishFood() called!");
         if (openFaced()) {
-            Debug.Log("ReplenishFood() - openFaced TRUE");
+            // Debug.Log("ReplenishFood() - openFaced TRUE");
             while (spawnCount < spawnMax) {
-                Debug.Log("ReplenishFood() - spawnFood() called");
+                // Debug.Log("ReplenishFood() - spawnFood() called");
                 spawnFood();
             }
         }
