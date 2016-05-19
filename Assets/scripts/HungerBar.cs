@@ -11,8 +11,8 @@ class HungerBar : MonoBehaviour {
 	public Texture2D[] hungerPic;
 	 
 	private const float hungerTimerThreshold = 5.0f; // how frequently the hunger bar should decrease in seconds
-	private const float maxHunger = 5.0f; 	// maximum value for hunger
-	private float curHunger = 5.0f;
+	private const float maxHunger = 8.0f; 	// maximum value for hunger
+	private float curHunger = 8.0f;
 	private float hungerTimer = 0.0f;
     public UnityEvent HungryEvent;
 	 
