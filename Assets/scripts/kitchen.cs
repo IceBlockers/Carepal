@@ -95,8 +95,8 @@ public class kitchen : MonoBehaviour {
             kitchenScene.clickBoxList.RemoveAt(0);
 
             // update hunger to reflect eating sandwich!
-            float newhunger = PlayerPrefs.GetFloat("Hunger") + 15;
-            if (newhunger > 5) newhunger = 5f;
+            float newhunger = PlayerPrefs.GetFloat("Hunger") + 8f;
+            if (newhunger > 8) newhunger = 8f;
             PlayerPrefs.SetFloat("Hunger", newhunger);
             PlayerPrefs.SetInt("SandwichMade", 0);
             PlayerPrefs.SetInt("AteEnzyme", 0);
@@ -148,7 +148,7 @@ public class kitchen : MonoBehaviour {
 
     void hungerBubble() {       
         // if they are hungry or not, display the need text
-        if (PlayerPrefs.GetFloat("Hunger") <= 1) {
+        if (PlayerPrefs.GetFloat("Hunger") <= 2) {
             //myCanvas.SetActive(true);
             if(PlayerPrefs.GetInt("SandwichMade") == 0) {
                 myCanvas.SetActive(true);
@@ -184,12 +184,12 @@ public class kitchen : MonoBehaviour {
 
         myCanvas.transform.position = new Vector2(pal.transform.position.x - 1.2f, pal.transform.position.y + 4.9f);
 
-        var newhunger = PlayerPrefs.GetFloat("Hunger") - ((Time.deltaTime * 0.5f) / 2);
+        var newhunger = PlayerPrefs.GetFloat("Hunger") - ((Time.deltaTime * 0.5f) / 1.5f);
         if(newhunger >= 0) {
             PlayerPrefs.SetFloat("Hunger", newhunger);
         }
 
-        if (PlayerPrefs.GetFloat("Hunger") <= 1) {
+        if (PlayerPrefs.GetFloat("Hunger") <= 2) {
             if (!displaySandwich) {
                 if(PlayerPrefs.GetInt("SandwichMade") == 0) {
                     sandwich_instance = (GameObject)Instantiate(sandwich_icon, new Vector2(7.551609f, -0.1312826f), Quaternion.identity);
