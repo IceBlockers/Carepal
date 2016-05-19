@@ -19,6 +19,7 @@ public class kitchen : MonoBehaviour {
     public bool displaySandwich = false;
     public GameObject sandwichToEat;
     public GameObject EnzymePill;
+    public GameObject starsPrefab;
     public float bubbleLifeCount = 0f;
     GameObject sandwich_instance;
 
@@ -88,6 +89,9 @@ public class kitchen : MonoBehaviour {
        if(PlayerPrefs.GetInt("AteEnzyme") == 1) {
             // disable visibility of sandwich and remove clickbox from list
             sandwichToEat.SetActive(false);
+            Vector3 starPos = pal.transform.position;
+            starPos.y += 2.5f; // +2.5 to center near upper character, rather than char's feet.
+            Instantiate(starsPrefab, starPos, Quaternion.identity);
             kitchenScene.clickBoxList.RemoveAt(0);
 
             // update hunger to reflect eating sandwich!

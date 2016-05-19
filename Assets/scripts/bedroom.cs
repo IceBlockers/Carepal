@@ -35,7 +35,8 @@ public class bedroom : MonoBehaviour {
             // set sandwichMade to 0 on game start
             PlayerPrefs.SetInt("SandwichMade", 0);
 
-            DontDestroyOnLoad(onStartTest.gameObject);
+            //This will break on Android if onStartTest is null
+            //DontDestroyOnLoad(onStartTest.gameObject);
             created = true;
             if (PlayerPrefs.GetInt("Tutorial") == 1) {
                 doIntro = true;
@@ -43,7 +44,8 @@ public class bedroom : MonoBehaviour {
                 doIntro = false;
             }
         } else {
-            Destroy(onStartTest.gameObject);
+            //This will break on Android if onStartTest is null
+            //Destroy(onStartTest.gameObject);
             doIntro = false;
         }
 
@@ -165,8 +167,13 @@ public class bedroom : MonoBehaviour {
                 bedroomScript.BedBehind();
             }
 
-            // update the bedroom
-            bedroomScene.sceneUpdate();
+            //If the player is in bed, any click will cause them to leave the bed.
+            if (Input.GetMouseButtonDown(0) == true && bedroomScript.isInBed()) {
+                bedroomScript.ToggleSleeping();
+            } else {
+                // update the bedroom
+                bedroomScene.sceneUpdate();
+            }
         }
 
         // move the speech bubble over the pal on each frame
