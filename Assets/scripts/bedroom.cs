@@ -27,7 +27,7 @@ public class bedroom : MonoBehaviour {
     
 
     private void Awake() {
-        PlayerPrefs.SetInt("Tutorial", 1);
+        //PlayerPrefs.SetInt("Tutorial", 1);
         Debug.Log(PlayerPrefs.GetInt("Tutorial"));
 
         // game was just launched
