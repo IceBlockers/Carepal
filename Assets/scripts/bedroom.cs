@@ -181,12 +181,14 @@ public class bedroom : MonoBehaviour {
 
         // update the pal's hunger on each frame
         if(!doIntro) {
-            var newhunger = PlayerPrefs.GetFloat("Hunger") - (Time.deltaTime * 0.5f);
-            PlayerPrefs.SetFloat("Hunger", newhunger);
+            var newhunger = PlayerPrefs.GetFloat("Hunger") - ((Time.deltaTime * 0.5f)/2);
+            if (newhunger >= 0) {
+                PlayerPrefs.SetFloat("Hunger", newhunger);
+            }
         }        
         // start sandwich game quest: character says they are hungry, speech bubble follows them.
         // sandwich floating and wiggling on door and fridge
-        if (PlayerPrefs.GetFloat("Hunger") <= 3) {
+        if (PlayerPrefs.GetFloat("Hunger") <= 1) {
             if(!displaySandwich) {
                 Instantiate(sandwich_icon);
                 displaySandwich = true;
