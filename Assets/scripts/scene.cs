@@ -121,6 +121,7 @@ namespace Assets.scripts {
                 if (palCloseToNode(moveStack.Peek())) {
                     moveStack.Pop();
                 }
+
                 if (moveStack.Count > 0) {
                     // calculate new normalized movement vector
                     clickVec.x = moveStack.Peek().position.x - pal.transform.position.x;
