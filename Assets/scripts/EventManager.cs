@@ -53,7 +53,7 @@ public sealed class EventManager : MonoBehaviour {
 		}
 	}
 	
-	// register an event
+	// register a function to an event name
 	public static void StartListening(string eventName, UnityAction listener) {
 		UnityEvent thisEvent = null;
 		
@@ -65,6 +65,23 @@ public sealed class EventManager : MonoBehaviour {
 			instance.dictionary.Add(eventName, thisEvent);
 		}
 	}
+	
+	// add an event
+	public static void AddEvent(string eventName, UnityEvent uevent) {
+		if (instance.dictionary.ContainsKey(eventName)) {
+			// do nothing
+			Debug.Log("Event " + eventName + " already present in event manager");
+		} else {
+			instance.dictionary.Add(eventName, uevent);
+		}
+	}
+	
+	public static void RemoveEvent(string eventName) {
+		if (instance.dictionary.ContainsKey(eventName)) {
+			instance.dictionary.Remove(eventName);
+		}
+	}
+			
 	
 	// remove a function from an event
 	public static void StopListening(string eventName, UnityAction listener) {

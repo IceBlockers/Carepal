@@ -18,28 +18,30 @@ public class Speech : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		 Vector3 pos = gameObject.transform.position;
-        //The x position of the character, but clamped 
-        //  so that we don't see past the end of the background sprite.
-        float dest = tracking.transform.position.x;
-		float desty = tracking.transform.position.y + 4;
+		if (tracking) {
+			 Vector3 pos = gameObject.transform.position;
+			//The x position of the character, but clamped 
+			//  so that we don't see past the end of the background sprite.
+			float dest = tracking.transform.position.x;
+			float desty = tracking.transform.position.y + 4;
 
 
-        //Distance to travel from current location to the position we want to see.
-        float diff = dest - gameObject.transform.position.x;
-		float diffy = desty - gameObject.transform.position.y;
+			//Distance to travel from current location to the position we want to see.
+			float diff = dest - gameObject.transform.position.x;
+			float diffy = desty - gameObject.transform.position.y;
 
-        //A calculate a small time-based fraction of the distance to travel, 
-        //  to slow down the motion and make it smoother.
-        float factor = Time.deltaTime * camSpeed;
-        factor = Mathf.Clamp(factor, 0.000001f, 1.0f); //prevent explosions
-        float partialMovement = diff * factor;
-		float partialMovementy = diffy * factor;
+			//A calculate a small time-based fraction of the distance to travel, 
+			//  to slow down the motion and make it smoother.
+			float factor = Time.deltaTime * camSpeed;
+			factor = Mathf.Clamp(factor, 0.000001f, 1.0f); //prevent explosions
+			float partialMovement = diff * factor;
+			float partialMovementy = diffy * factor;
 
-        //the calculated position to put the camera
-        pos.x += partialMovement;
-		pos.y += partialMovementy;
-        gameObject.transform.position = pos;	
+			//the calculated position to put the camera
+			pos.x += partialMovement;
+			pos.y += partialMovementy;
+			gameObject.transform.position = pos;	
+		}
 	}
 	
 	public void NextLine () {

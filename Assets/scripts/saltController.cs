@@ -25,6 +25,11 @@ public class saltController : MonoBehaviour {
             saltShakes--;
             saltAnim.SetTrigger("SaltyTime");
             Instantiate(saltParticles);
+			// play sound
+			AudioSource src = GetComponent<AudioSource>();
+			if (!src.isPlaying) {
+				src.Play();
+			}
         }
         else if (saltShakes == 1)
         {

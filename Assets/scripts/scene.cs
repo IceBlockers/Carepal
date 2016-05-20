@@ -120,12 +120,13 @@ namespace Assets.scripts {
             if (moveStack.Count > 0) {
                 if (palCloseToNode(moveStack.Peek())) {
                     moveStack.Pop();
-                    if (moveStack.Count > 0) {
-                        // calculate new normalized movement vector
-                        clickVec.x = moveStack.Peek().position.x - pal.transform.position.x;
-                        clickVec.y = moveStack.Peek().position.y - pal.transform.position.y;
-                        clickVec.Normalize();
-                    }
+                }
+
+                if (moveStack.Count > 0) {
+                    // calculate new normalized movement vector
+                    clickVec.x = moveStack.Peek().position.x - pal.transform.position.x;
+                    clickVec.y = moveStack.Peek().position.y - pal.transform.position.y;
+                    clickVec.Normalize();
                 }
 
                 if (clickVec.x < 0) {
