@@ -35,15 +35,13 @@ public class OliveController : MonoBehaviour {
         {
             active = true;
             Vector3 clickPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            Vector3 oliveHeading = clickPoint - olivePosition;
+            Vector3 oliveHeading = clickPoint - new Vector3(olivePosition.x, olivePosition.y - oliveYdiff, olivePosition.z);
+
             oliveHeading.Normalize();
             oliveHeading *= oliveSpeed;
-            // olive = (GameObject)Instantiate(olivePrefab, olivePosition, Quaternion.identity);
 
             rOlive.isKinematic = false;
-
             rOlive.AddForce(oliveHeading, ForceMode2D.Impulse);
-
         }
 
         if (olive.transform.position.y < yCutoff)
