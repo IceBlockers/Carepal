@@ -21,6 +21,8 @@ public class kitchen : MonoBehaviour {
     public GameObject EnzymePill;
     public GameObject starsPrefab;
     public float bubbleLifeCount = 0f;
+	
+	public AudioClip SandwichClip;
     GameObject sandwich_instance;
 
     LevelScene kitchenScene;
@@ -103,6 +105,12 @@ public class kitchen : MonoBehaviour {
 
             myCanvas.SetActive(true);
             bubbleText.text = "Yum!";
+			// play sound
+			AudioSource src = GetComponent<AudioSource>();
+			if (!src.isPlaying) {
+				src.clip = SandwichClip;
+				src.Play();
+			}
             bubbleLifeCount = 0f;
         } else {
             myCanvas.SetActive(true);
