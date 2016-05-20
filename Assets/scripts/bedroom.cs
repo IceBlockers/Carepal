@@ -32,6 +32,9 @@ public class bedroom : MonoBehaviour {
 
         // game was just launched
         if (!created) {
+            // set tutorial to 1
+            PlayerPrefs.SetInt("Tutorial", 1);
+
             // set sandwichMade to 0 on game start
             PlayerPrefs.SetInt("SandwichMade", 0);
 
