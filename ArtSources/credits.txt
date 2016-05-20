@@ -1,0 +1,21 @@
+(GIS = google image search)
+
+Kitchen picture:
+Alberto Mielgo, July 1, 2007
+albertomielgo.blogspot.ca
+
+Food images:
+GIS + photoshop
+
+Bedroom images:
+	original 3D assets (maya), render + photoshop
+	clock: GIS + photoshop
+
+Fridge image:
+	original 3D render + Kitchen + photoshop
+
+Dialog boxes, GUI elements:
+	original photoshop
+
+Checkmark, X:
+	GIS + photoshop
