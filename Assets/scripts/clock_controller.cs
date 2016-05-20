@@ -12,6 +12,8 @@ public class clock_controller : MonoBehaviour {
 
     public void StartRing() {
         m_Anim.SetBool("ringing", true);
+		AudioSource source = GetComponent<AudioSource>();
+		source.Play();
         Invoke("StopRing", 1);
     }
 
